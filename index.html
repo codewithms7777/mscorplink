@@ -40,79 +40,57 @@ const shortenBtn = document.getElementById('shortenBtn');
 const input = document.getElementById('inputURL');
 const result = document.getElementById('result');
 
-function show(msg, type){
-  result.hidden = false;
-  result.innerHTML = msg;
-  result.classList.toggle('error', type === 'error');
-  result.classList.toggle('ok', type === 'ok');
-}
-
-function validateUrl(v){
-  try{
-    // allow naked domains by auto-prepending https later; quick sanity check:
-    const test = v.startsWith('http') ? new URL(v) : new URL('https://' + v);
-    return test.href;
-  }catch(e){ return null; }
-}
+// Your Render backend URL
+const API = "https://mscorplink.onrender.com/shorten";
 
 async function shorten(){
   const raw = input.value.trim();
-  if(!raw){ show('Please paste a URL.', 'error'); return; }
-
-  const fixed = validateUrl(raw);
-  if(!fixed){ show('Invalid URL format.', 'error'); return; }
-
-  show('Generating… <span class="tiny">(network request)</span>');
-  shortenBtn.disabled = true;
-
-  try{
-    // Use is.gd with JSON response to get structured data
-    const api = 'https://is.gd/create.php?format=json&url=' + encodeURIComponent(fixed);
-    const res = await fetch(api, {method:'GET'});
-    if(!res.ok) throw new Error('Network response ' + res.status);
-
-    const data = await res.json();
-    if(data.errorcode){
-      show('API error: ' + (data.errormessage || 'unknown'), 'error');
-    } else if(data.shorturl){
-      // show short URL + copy button
-      result.hidden = false;
-      result.innerHTML = `
-        <div class="flex">
-          <div style="flex:1">
-            <div class="status">Short URL</div>
-            <a id="shortLink" href="${data.shorturl}" target="_blank" rel="noopener">${data.shorturl}</a>
-            <div class="tiny">Original: ${fixed}</div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button id="copyBtn" class="copyBtn">Copy</button>
-            <button id="openBtn" class="copyBtn">Open</button>
-          </div>
-        </div>
-      `;
-      document.getElementById('copyBtn').onclick = async () => {
-        try{
-          await navigator.clipboard.writeText(data.shorturl);
-          show('Copied to clipboard ✅', 'ok');
-        }catch(e){
-          show('Copy failed — select and copy manually.', 'error');
-        }
-      };
-      document.getElementById('openBtn').onclick = () => window.open(data.shorturl, '_blank');
-    } else {
-      show('Unexpected API response.', 'error');
-    }
-  }catch(err){
-    // Common failure reasons: network, mixed-content (if page served over http and API blocked), CORS (rare), offline
-    show('Request failed: ' + (err.message || err), 'error');
-    console.error(err);
-  } finally {
-    shortenBtn.disabled = false;
+  if(!raw){
+    result.hidden = false;
+    result.innerHTML = "Please paste a URL.";
+    return;
   }
+
+  // Always add https:// if missing
+  let fixed = raw;
+  if(!fixed.startsWith("http")) fixed = "https://" + fixed;
+
+  result.hidden = false;
+  result.innerHTML = "Generating…";
+
+  const res = await fetch(API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url: fixed })
+  });
+
+  const data = await res.json();
+
+  if(data.error){
+    result.innerHTML = data.error;
+    return;
+  }
+
+  result.innerHTML = `
+    <div class="flex">
+      <div style="flex:1">
+        <div class="status">Short URL</div>
+        <a id="shortLink" href="${data.short}" target="_blank">${data.short}</a>
+        <div class="tiny">Original: ${fixed}</div>
+      </div>
+      <button id="copyBtn" class="copyBtn">Copy</button>
+    </div>
+  `;
+
+  document.getElementById('copyBtn').onclick = async () => {
+    await navigator.clipboard.writeText(data.short);
+    result.innerHTML = "Copied! ✔";
+  };
 }
 
-shortenBtn.addEventListener('click', shorten);
-input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') shorten(); });
+shortenBtn.addEventListener("click", shorten);
+input.addEventListener("keydown", e => { if(e.key === "Enter") shorten(); });
 </script>
+
 </body>
 </html>
