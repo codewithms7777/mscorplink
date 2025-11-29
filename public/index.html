@@ -4,174 +4,62 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS Link Shortener</title>
-
 <style>
-    /* ---------------- GLOBAL UI ---------------- */
-    :root{
-        --accent:#5b7bff;
-        --accent2:#7f5bff;
-        --accent3:#ff5bbd;
-        --glass-bg: rgba(255,255,255,0.15);
-        --text:#fff;
-        --card-bg: rgba(255,255,255,0.2);
-    }
-
-    *{box-sizing:border-box;}
-
-    body{
-        margin:0;
-        padding:0;
-        height:100vh;
-        font-family: "Poppins", sans-serif;
-        color:var(--text);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        background:linear-gradient(135deg,#5b7bff,#7f5bff,#ff5bbd);
-        background-size:300% 300%;
-        animation:bgMove 12s ease infinite;
-    }
-
-    @keyframes bgMove{
-        0%{background-position:0% 50%;}
-        50%{background-position:100% 50%;}
-        100%{background-position:0% 50%;}
-    }
-
-    /* ---------------- CARD ---------------- */
-    .card{
-        width:95%;
-        max-width:450px;
-        background:var(--glass-bg);
-        backdrop-filter: blur(20px);
-        border-radius:20px;
-        padding:28px;
-        box-shadow:0 10px 40px rgba(0,0,0,0.3);
-        animation:fadeIn 0.9s ease;
-    }
-
-    @keyframes fadeIn{
-        from{opacity:0; transform:translateY(20px);}
-        to{opacity:1; transform:translateY(0);}
-    }
-
-    h1{
-        text-align:center;
-        font-size:28px;
-        margin-bottom:18px;
-        background: linear-gradient(to right,#fff,#ffd6ff);
-        -webkit-background-clip:text;
-        color:transparent;
-    }
-
-    /* ---------------- INPUT AREA ---------------- */
-    .row{
-        display:flex;
-        gap:10px;
-        margin-bottom:15px;
-    }
-
-    input{
-        flex:1;
-        padding:14px;
-        font-size:15px;
-        border:none;
-        border-radius:12px;
-        outline:none;
-        background:#ffffffcc;
-        color:#444;
-    }
-
-    button{
-        padding:14px 18px;
-        border:none;
-        border-radius:12px;
-        cursor:pointer;
-        background:linear-gradient(135deg,var(--accent),var(--accent3));
-        color:#fff;
-        font-weight:600;
-        transition:0.3s;
-    }
-
-    button:hover{
-        transform:scale(1.05);
-        box-shadow:0 0 12px #fff;
-    }
-
-    /* ---------------- RESULT ---------------- */
-    #result{
-        margin-top:15px;
-        background:var(--card-bg);
-        padding:15px;
-        border-radius:14px;
-        display:none;
-        animation:fadeIn 0.4s ease;
-    }
-
-    .tiny{
-        margin-top:6px;
-        font-size:13px;
-        color:#f1f1f1c9;
-    }
-
-    .flex{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-    }
-
-    .copyBtn{
-        padding:8px 12px;
-        background:#ffffffcc;
-        color:#444;
-        border-radius:10px;
-        border:none;
-        cursor:pointer;
-        font-weight:600;
-        transition:0.3s;
-    }
-    .copyBtn:hover{transform:scale(1.08);}
-
-    .loading{
-        animation: blink 1s infinite;
-    }
-    @keyframes blink{
-        0%,100%{opacity:0.4;}
-        50%{opacity:1;}
-    }
-
+:root{
+    --accent:#5b7bff;
+    --accent2:#7f5bff;
+    --accent3:#ff5bbd;
+    --glass-bg: rgba(255,255,255,0.15);
+    --text:#fff;
+    --card-bg: rgba(255,255,255,0.2);
+}
+*{box-sizing:border-box;}
+body{
+    margin:0; padding:0; height:100vh;
+    font-family:"Poppins",sans-serif; color:var(--text);
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#5b7bff,#7f5bff,#ff5bbd);
+    background-size:300% 300%; animation:bgMove 12s ease infinite;
+}
+@keyframes bgMove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+.card{
+    width:95%; max-width:450px;
+    background:var(--glass-bg); backdrop-filter:blur(20px);
+    border-radius:20px; padding:28px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.3);
+}
+h1{text-align:center; font-size:28px; margin-bottom:18px; background:linear-gradient(to right,#fff,#ffd6ff); -webkit-background-clip:text; color:transparent;}
+.row{display:flex; gap:10px; margin-bottom:15px;}
+input{flex:1; padding:14px; font-size:15px; border:none; border-radius:12px; outline:none; background:#ffffffcc; color:#444;}
+button{padding:14px 18px; border:none; border-radius:12px; cursor:pointer; background:linear-gradient(135deg,var(--accent),var(--accent3)); color:#fff; font-weight:600; transition:0.3s;}
+button:hover{transform:scale(1.05); box-shadow:0 0 12px #fff;}
+#result{margin-top:15px; background:var(--card-bg); padding:15px; border-radius:14px; display:none;}
+.flex{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;}
+.copyBtn{padding:8px 12px; background:#ffffffcc; color:#444; border-radius:10px; border:none; cursor:pointer; font-weight:600; transition:0.3s;}
+.copyBtn:hover{transform:scale(1.08);}
+.tiny{margin-top:6px; font-size:13px; color:#f1f1f1c9;}
+.loading{animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:0.4;}50%{opacity:1;}}
+.altBtn{display:inline-block;padding:10px 14px;border-radius:8px;background:#e8efff;color:#3554ff;text-decoration:none;font-weight:500;font-size:14px;border:1px solid #c8d6ff;transition:0.2s ease;margin-top:12px;}
+.altBtn:hover{background:#dde7ff;color:#2f4bcc;}
+#shortLinkInput{width:100%; padding:8px; border-radius:6px; border:none; background:#ffffffcc; color:#444; font-size:14px; margin-top:5px;}
 </style>
 </head>
-
 <body>
 <div class="card">
 
-    <h1>🔗 MS Link Shortener</h1>
+<h1>🔗 MS Link Shortener</h1>
 
-    <div class="row">
-        
-        <input id="inputURL" 
-       type="text" 
-       placeholder="Paste or type full URL here…" 
-       aria-label="URL input"
-       autocomplete="off"
-       spellcheck="false">
-
-        <button id="shortenBtn">Shorten</button>
-    </div>
-
-    <div id="result"></div>
-
-    <div style="margin-top:14px; text-align:center;">
-  <a href="your-old-page.html" target="_blank"
-     style="display:inline-block;padding:10px 14px;border-radius:8px;
-            background:#e8efff;color:#3554ff;text-decoration:none;
-            font-weight:500;font-size:14px;border:1px solid #c8d6ff;
-            transition:0.2s ease;">
-     🚀 Use Offline is.gd Version
-  </a>
+<div class="row">
+    <input id="inputURL" type="text" placeholder="Paste or type full URL here…" autocomplete="off" spellcheck="false">
+    <button id="shortenBtn">Shorten</button>
 </div>
 
+<div id="result"></div>
+
+<div style="text-align:center;">
+  <a class="altBtn" href="your-old-page.html" target="_blank">🚀 Use Offline is.gd Version</a>
+</div>
 
 </div>
 
@@ -179,72 +67,58 @@
 const shortenBtn = document.getElementById('shortenBtn');
 const input = document.getElementById('inputURL');
 const result = document.getElementById('result');
-
 const API = "https://mscorplink.onrender.com/shorten";
 
 async function shorten(){
     let raw = input.value.trim();
-    if(!raw){
-        show("Please enter a URL.");
-        return;
-    }
-
+    if(!raw){ show("Please enter a URL."); return; }
     if(!raw.startsWith("http")) raw ="https://" + raw;
 
     show("Generating short link…", true);
 
-    const res = await fetch(API,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({url:raw})
-    });
+    try{
+        const res = await fetch(API,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({url:raw})
+        });
+        const data = await res.json();
+        if(data.error){ show(data.error); return; }
 
-    const data = await res.json();
-
-    if(data.error){
-        show(data.error);
-        return;
-    }
-
-    result.innerHTML = `
-        <div class="flex">
-            <div>
-                <strong>Short URL:</strong><br>
-                <a href="${data.short}" target="_blank" style="color:#fff;text-decoration:underline">${data.short}</a>
-                <div class="tiny">Original: ${raw}</div>
+        result.style.display="block";
+        result.innerHTML = `
+            <div class="flex">
+                <div style="flex:1">
+                    <strong>Short URL:</strong>
+                    <input type="text" id="shortLinkInput" value="${data.short}" readonly>
+                    <div class="tiny">Original: ${raw}</div>
+                </div>
+                <button id="copyBtn" class="copyBtn">Copy / Edit</button>
             </div>
+        `;
 
-            <button id="copyBtn" class="copyBtn">Copy</button>
-        </div>
-          <div style="margin-top:10px; text-align:center;">
-    <a href="https://mscorp7.github.io/mslinkshortner.html" target="_blank"
-       style="display:inline-block;padding:8px 12px;border-radius:6px;
-              background:#dde7ff;color:#3554ff;text-decoration:none;
-              font-size:13px;border:1px solid #c5d4ff;">
-       Use Alternative (is.gd)
-    </a>
-  </div>
+        const shortInput = document.getElementById("shortLinkInput");
+        document.getElementById("copyBtn").onclick = async ()=>{
+            input.value = shortInput.value; // populate main input
+            input.focus();
+            input.select();
+            try{ await navigator.clipboard.writeText(shortInput.value); show("Copied ✔"); }
+            catch(e){ show("Copied to input field. Use Ctrl+C manually.", false);}
+        };
 
-    `;
-
-    document.getElementById("copyBtn").onclick = async ()=>{
-        await navigator.clipboard.writeText(data.short);
-        show("Copied ✔");
-    };
+    }catch(err){
+        show("Request failed. Try again.", false);
+        console.error(err);
+    }
 }
 
 function show(msg, loading=false){
     result.style.display="block";
-    result.innerHTML = loading 
-      ? `<span class="loading">${msg}</span>`
-      : msg;
+    result.innerHTML = loading ? `<span class="loading">${msg}</span>` : msg;
 }
 
 shortenBtn.onclick = shorten;
 input.onkeydown = e => e.key==="Enter" && shorten();
 </script>
-
 </body>
 </html>
-
-
