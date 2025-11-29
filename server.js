@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 const urlDB = {}; // In-memory storage
-
+const BASE_URL = "https://mscorplink.onrender.com/";
 // Generate short code
 function generateCode() {
   return crypto.randomBytes(3).toString("hex"); // 6-char code
@@ -20,7 +20,7 @@ app.post("/shorten", (req, res) => {
   const code = generateCode();
   urlDB[code] = url;
 
-  res.json({ short: `http://localhost:3000/${code}` });
+  res.json({ short: `${BASE_URL}/${code}` });
 });
 
 // Redirect
@@ -33,3 +33,4 @@ app.get("/:code", (req, res) => {
 });
 
 app.listen(3000, () => console.log("Running on http://localhost:3000"));
+
