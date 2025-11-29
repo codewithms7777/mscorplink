@@ -28,7 +28,8 @@
         justify-content:center;
         background:linear-gradient(135deg,#5b7bff,#7f5bff,#ff5bbd);
         background-size:300% 300%;
-        animation:bgMove 12s ease infinite;
+        /* animation:bgMove 12s ease infinite; */
+        animation: none !important;
     }
 
     @keyframes bgMove{
@@ -45,7 +46,8 @@
         border-radius:20px;
         padding:28px;
         box-shadow:0 10px 40px rgba(0,0,0,0.3);
-        animation:fadeIn 0.9s ease;
+        /* animation:fadeIn 0.9s ease; */
+        animation: none !important;
     }
 
     @keyframes fadeIn{
@@ -237,9 +239,17 @@ function show(msg, loading=false){
       : msg;
 }
 
+    
 shortenBtn.onclick = shorten;
 input.onkeydown = e => e.key==="Enter" && shorten();
+
+    window.onload = () => {
+    const input = document.getElementById('inputURL');
+    input.focus();
+};
+
 </script>
 
 </body>
 </html>
+
