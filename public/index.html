@@ -149,7 +149,14 @@
     <h1>🔗 MS Link Shortener</h1>
 
     <div class="row">
-        <input id="inputURL" placeholder="Paste long URL here…">
+        
+        <input id="inputURL" 
+       type="text" 
+       placeholder="Paste or type full URL here…" 
+       aria-label="URL input"
+       autocomplete="off"
+       spellcheck="false">
+
         <button id="shortenBtn">Shorten</button>
     </div>
 
